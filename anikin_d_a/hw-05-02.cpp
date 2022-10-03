@@ -9,7 +9,7 @@ int main()
 	int b = 1;
 	float g = 0.05;
 	float e = 0.001;
-	for (float x = a; x < b; x += g) {
+	for (float x = a; x < b + g; x += g) {
 		int i = 1;
 		float s = 0;
 
