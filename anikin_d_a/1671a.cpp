@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <string>
 
 int main(){
@@ -11,25 +10,24 @@ int main(){
 		std::string us;
 		us = s[0];
 		int flag = 1;
-		if (s.length() == 1) {
-			std::cout << "NO";
-			continue;
-		}
 		for (int j = 1; j < s.length(); j++) {
 			if (s[j] == us[0]) {
 				us += s[j];
 			}
 			else {
-				if (not(us.length() % 2 == 0 | us.length() % 3 == 0)) {
-					std::cout << "NO";
+				if (us.length() == 1) {
+					std::cout << "NO" << "\n";
 					flag = 0;
 					break;
 				}
 				us = s[j];
 			}
 		}
-		if (flag) {
-			std::cout << "YES";
+		if (us.length() == 1 && flag) {
+			std::cout << "NO" << "\n";
+		}
+		else if (flag) {
+			std::cout << "YES" << "\n";
 		}
 	}
 }
