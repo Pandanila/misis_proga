@@ -13,36 +13,36 @@ int main(){
 		char cur_col;
 		std::cin >> cur_col;
 
+
 		std::string colors;
 		std::cin >> colors;
+		colors = colors + colors;
 
-		if (colors.length() == 1 && colors[0] == 'g') {
-			std::cout << 0 << "\n";
-			continue;
-		}
+		int cur_k = 0;
+		int cur_g = 0;
+		int flag = 0;
 
-		colors += colors;
+		std::vector<int> lengths;
 
-		int flag = 1;
-		int time = -1;
-		int count = 0;
+		for (int m = 0; m < colors.length(); m++) {
+			if ((colors[m] == cur_col) && (not flag)) {
+				cur_k = m;
+				flag = 1;
+			}
 
-		for (int j = 0; j < n * 2; j++) {
-			if (colors[j] == cur_col && flag) {
-				count = 0;
+			if (colors[m] == 'g' && flag){
+				lengths.push_back(m - cur_k);
 				flag = 0;
 			}
-			if (colors[j] == 'g') {
-				if (count > time) {
-					time = count;
-					flag = 1;
-				}
-			}
-			else {
-				count += 1;
+		}
+
+		int max_l = -1;
+		for (int m = 0; m < lengths.size(); m++) {
+			if (lengths[m] > max_l) {
+				max_l = lengths[m];
 			}
 		}
 
-		std::cout << time;
+		std::cout << max_l << "\n";
 	}
 }
