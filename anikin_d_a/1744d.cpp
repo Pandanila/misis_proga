@@ -39,11 +39,9 @@ int main(){
 		int flag = 1;
 		int j = 0;
 		
-		q = int(std::log(n)/std::log(2));
+		q = int(std::log2(n));
 		
-		std::cout << q;
-		
-		while (q != 0){
+		while (q != 0 && flag){
 		    q = int(std::log(n)/std::log(2)) - j;
 		    for (int k = 1; k < n + 1; k++){
 		        if (razl(k) == q){
@@ -51,7 +49,7 @@ int main(){
 		            tries += 1;
 		        }
 		        if (num_2 >= n){
-		            std::cout << tries;
+		            std::cout << tries << "\n";
 		            flag = 0;
 		            break;
 		        }
@@ -60,7 +58,7 @@ int main(){
 		}
 		
 		if (flag) {
-		    std::cout << -1;
+		    std::cout << -1 << "\n";
 		}
 	}
 }
