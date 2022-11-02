@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cmath>
 
-int main(){
+int main() {
 	int a = 0;
 	int c = 0;
 	std::cin >> a >> c;
@@ -32,6 +33,18 @@ int main(){
 	std::vector<int> bv;
 
 	for (int i = 0; i < av.size(); i += 1) {
-		if ()
+		if (cv[i] >= av[i]) {
+			bv.push_back(cv[i] - av[i]);
+		}
+		else {
+			bv.push_back(cv[i] + 3 - av[i]);
+		}
 	}
+
+	int b = 0;
+	for (int i = 0; i < bv.size(); i += 1) {
+		b += bv[i] * std::pow(3, i);
+	}
+
+	std::cout << b;
 }
