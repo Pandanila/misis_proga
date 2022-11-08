@@ -45,3 +45,4 @@ int main() {
 		std::cout << cur_1;
 	}
 }
+Доделать
