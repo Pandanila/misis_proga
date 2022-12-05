@@ -112,7 +112,7 @@ int main() {
 			core_velocity_y_1 += g;
 			core_velocity_1 = core_velocity_x_1 + core_velocity_y_1;
 			core_rad_vector_1 += core_velocity_1;
-			core_velocity_2 = core_rad_vector_1 - core_rad_vector_2;
+			core_velocity_2 = core_rad_vector_1 - core_rad_vector_2 - g;
 			std::cout << core_velocity_2;
 			break;
 		}
