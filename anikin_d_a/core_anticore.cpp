@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <fstream>
 
 struct Rdec2D {
 	double x = 0;
@@ -12,7 +13,7 @@ struct Rpol2D {
 };
 
 std::ostream& operator<<(std::ostream &out, const Rpol2D &point) {
-	out << "(" << point.r << "," << point.phi << ")" << "\n";
+	out << "(" << point.r << "," << point.phi << ")";
 	return out;
 }
 
@@ -31,7 +32,7 @@ Rpol2D ToPol(Rdec2D vector) {
 }
 
 std::ostream& operator<<(std::ostream &out, const Rdec2D &point) {
-	out << "(" << point.x << "," << point.y << ")" << "\n";
+	out << "(" << point.x << "," << point.y << ")";
 	return out;
 }
 
@@ -90,31 +91,48 @@ Rpol2D operator+=(Rpol2D lhs, Rpol2D rhs) {
 //модификация № 1. Когда неизвестна первоначальная скорость противоядра
 int main() {
 	Rdec2D core_rad_vector_1 = { 0, 6 };
-	Rdec2D core_velocity_1 = { 1000, 1000 };
+	Rdec2D core_velocity_1 = { 10, 1000 };
 	Rdec2D core_velocity_x_1 = { core_velocity_1.x, 0 };
 	Rdec2D core_velocity_y_1 = { 0, core_velocity_1.y };
 	Rdec2D core_rad_vector_2 = { 200, 6 };
-	Rdec2D core_velocity_2 = { 0, 0 };
+	Rdec2D core_velocity_2 = { -10, 5000 };
+	Rdec2D core_velocity_x_2 = { core_velocity_2.x, 0 };
+	Rdec2D core_velocity_y_2 = { 0, core_velocity_2.y };
 	Rdec2D g = { 0, -9.8 };
 	double s = norm(core_rad_vector_1 - core_rad_vector_2);
 	double t_1 = 0;
-	double delta_t = 1;
+	double delta_t = 0.1;
 
 	//вычисляем время, за которое звук достигнет точки запуска противоядра
 	double sound_t = s / 331;
+	//double sound_t = 1;
 
-	while (t_1 < sound_t) {
+	std::ofstream file; 
+	file.open("new.csv");
+
+
+
+	while (t_1 < 25 && core_rad_vector_1.y >= 0) {
 		t_1 += delta_t;
 		core_velocity_y_1 += g;
 		core_velocity_1 = core_velocity_x_1 + core_velocity_y_1;
 		core_rad_vector_1 += core_velocity_1;
 		if (t_1 >= sound_t) {
-			core_velocity_y_1 += g;
+			core_velocity_y_2 += g;
+			core_velocity_2 = core_velocity_x_2 + core_velocity_y_2;
+			core_rad_vector_2 += core_velocity_2;
+			/*core_velocity_y_1 += g;
 			core_velocity_1 = core_velocity_x_1 + core_velocity_y_1;
 			core_rad_vector_1 += core_velocity_1;
 			core_velocity_2 = core_rad_vector_1 - core_rad_vector_2 - g;
-			std::cout << core_velocity_2;
-			break;
+			std::cout << core_velocity_2;*/
+			file << core_rad_vector_1.x << "\t" << core_rad_vector_1.y << " \t" << core_rad_vector_2.x << "\t" << core_rad_vector_2.y << "\n";
+			if (core_rad_vector_2.y == core_rad_vector_1.y && core_rad_vector_2.x == core_rad_vector_1.x) {
+				std::cout << "";
+				break;
+			}
 		}
 	}
+
+	file.close();
 }
