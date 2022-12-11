@@ -59,15 +59,27 @@ Rdec2D operator-(const Rdec2D& lhs, const Rdec2D& rhs) {
 	return res;
 }
 
-Rdec2D operator*=(Rdec2D& lhs, const int& rhs) {
+Rdec2D operator*=(Rdec2D& lhs, const double& rhs) {
 	lhs.x *= rhs;
 	lhs.y *= rhs;
 	return lhs;
 }
 
-Rdec2D operator*(Rdec2D& lhs, const int& rhs) {
+Rdec2D operator/=(Rdec2D& lhs, const double& rhs) {
+	lhs.x /= rhs;
+	lhs.y /= rhs;
+	return lhs;
+}
+
+Rdec2D operator*(Rdec2D lhs, const double& rhs) {
 	Rdec2D& res = lhs;
 	res *= rhs;
+	return res;
+}
+
+Rdec2D operator/(Rdec2D lhs, const double& rhs) {
+	Rdec2D& res = lhs;
+	res /= rhs;
 	return res;
 }
 
@@ -79,13 +91,32 @@ double dot(const Rdec2D& lhs, const Rdec2D& rhs) {
 	return (lhs.x*rhs.x + lhs.y*rhs.y);
 }
 
-Rpol2D operator+=(Rpol2D lhs, Rpol2D rhs) {
+Rpol2D operator+=(Rpol2D& lhs, const Rpol2D& rhs) {
 	Rdec2D new_lhs = ToDec(lhs);
 	Rdec2D new_rhs = ToDec(rhs);
 	new_lhs += new_rhs;
 	lhs = ToPol(new_lhs);
-	std::cout << lhs << "\n";
 	return lhs;
+}
+
+Rpol2D operator-=(Rpol2D& lhs, const Rpol2D& rhs) {
+	Rdec2D new_lhs = ToDec(lhs);
+	Rdec2D new_rhs = ToDec(rhs);
+	new_lhs -= new_rhs;
+	lhs = ToPol(new_lhs);
+	return lhs;
+}
+
+Rpol2D operator+(const Rpol2D& lhs, const Rpol2D& rhs) {
+	Rpol2D res = lhs;
+	res += rhs;
+	return res;
+}
+
+Rpol2D operator-(const Rpol2D& lhs, const Rpol2D& rhs) {
+	Rpol2D res = lhs;
+	res -= rhs;
+	return res;
 }
 
 int main() {
