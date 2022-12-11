@@ -2,6 +2,9 @@
 #include <cmath>
 #include <fstream>
 
+#include <iostream>
+#include <cmath>
+
 struct Rdec2D {
     double x = 0;
     double y = 0;
@@ -13,7 +16,7 @@ struct Rpol2D {
 };
 
 std::ostream& operator<<(std::ostream &out, const Rpol2D &point) {
-    out << "(" << point.r << "," << point.phi << ")";
+    out << "(" << point.r << "," << point.phi << ")" << "\n";
     return out;
 }
 
@@ -32,7 +35,7 @@ Rpol2D ToPol(Rdec2D vector) {
 }
 
 std::ostream& operator<<(std::ostream &out, const Rdec2D &point) {
-    out << "(" << point.x << "," << point.y << ")";
+    out << "(" << point.x << "," << point.y << ")" << "\n";
     return out;
 }
 
@@ -60,15 +63,27 @@ Rdec2D operator-(const Rdec2D& lhs, const Rdec2D& rhs) {
     return res;
 }
 
-Rdec2D operator*=(Rdec2D& lhs, const int& rhs) {
+Rdec2D operator*=(Rdec2D& lhs, const double& rhs) {
     lhs.x *= rhs;
     lhs.y *= rhs;
     return lhs;
 }
 
-Rdec2D operator*(Rdec2D& lhs, const int& rhs) {
+Rdec2D operator/=(Rdec2D& lhs, const double& rhs) {
+    lhs.x /= rhs;
+    lhs.y /= rhs;
+    return lhs;
+}
+
+Rdec2D operator*(Rdec2D lhs, const double& rhs) {
     Rdec2D& res = lhs;
     res *= rhs;
+    return res;
+}
+
+Rdec2D operator/(Rdec2D lhs, const double& rhs) {
+    Rdec2D& res = lhs;
+    res /= rhs;
     return res;
 }
 
@@ -80,13 +95,32 @@ double dot(const Rdec2D& lhs, const Rdec2D& rhs) {
     return (lhs.x*rhs.x + lhs.y*rhs.y);
 }
 
-Rpol2D operator+=(Rpol2D lhs, Rpol2D rhs) {
+Rpol2D operator+=(Rpol2D& lhs, const Rpol2D& rhs) {
     Rdec2D new_lhs = ToDec(lhs);
     Rdec2D new_rhs = ToDec(rhs);
     new_lhs += new_rhs;
     lhs = ToPol(new_lhs);
-    std::cout << lhs << "\n";
     return lhs;
+}
+
+Rpol2D operator-=(Rpol2D& lhs, const Rpol2D& rhs) {
+    Rdec2D new_lhs = ToDec(lhs);
+    Rdec2D new_rhs = ToDec(rhs);
+    new_lhs -= new_rhs;
+    lhs = ToPol(new_lhs);
+    return lhs;
+}
+
+Rpol2D operator+(const Rpol2D& lhs, const Rpol2D& rhs) {
+    Rpol2D res = lhs;
+    res += rhs;
+    return res;
+}
+
+Rpol2D operator-(const Rpol2D& lhs, const Rpol2D& rhs) {
+    Rpol2D res = lhs;
+    res -= rhs;
+    return res;
 }
 
 int collision_of_cores(Rdec2D r_1, Rdec2D v_1_x, Rdec2D v_1_y,
@@ -95,7 +129,7 @@ int collision_of_cores(Rdec2D r_1, Rdec2D v_1_x, Rdec2D v_1_y,
                                                                     координатах при столкновении*/
     //описываем скалярные величины
     double s = norm(r_1 - r_2);      //расстояние между ядрами
-    double t_of_sound = s / 331;         //время, за которое звук дойдет от ядра до противоядра
+    double t_of_sound = s / 300;         //время, за которое звук дойдет от ядра до противоядра
     double t = 0;                        //счетчик времени
     //описываем векторные величины
     Rdec2D g = {0, -9.8};          //вектор ускорения свободного падения
@@ -103,7 +137,7 @@ int collision_of_cores(Rdec2D r_1, Rdec2D v_1_x, Rdec2D v_1_y,
     Rdec2D v_2 = v_2_x + v_2_y;          // вектор скорости противоядра
 
     // смотрим, столкнутся или нет
-    while (true){
+    while (r_1.y >= 0){
         t += delta_t;
         v_1_y += g;
         v_1 = v_1_y + v_1_x;             //считаем вектор скорости ядра в каждый момент времени
@@ -119,8 +153,50 @@ int collision_of_cores(Rdec2D r_1, Rdec2D v_1_x, Rdec2D v_1_y,
             return 1;
         }
 
-        if (r_1.x < r_2.x){
-            return 0;
+        if (r_2.x < r_1.x){
+            if (r_2.y < r_1.y){
+                return 2; // недолёт
+            }
+            if (r_2.y > r_1.y){
+                return 3; //перелет
+            }
+        }
+    }
+    return 0;
+}
+
+int main() {
+    Rdec2D core_rad_vector_1 = { 0, 6 };
+    Rdec2D core_velocity_1 = { 10, 1000 };
+    Rdec2D core_velocity_x_1 = { core_velocity_1.x, 0 };
+    Rdec2D core_velocity_y_1 = { 0, core_velocity_1.y };
+    Rdec2D core_rad_vector_2 = { 200, 6 };
+    Rdec2D core_velocity_2 = { -10, 2000 };
+    Rdec2D core_velocity_x_2 = { core_velocity_2.x, 0 };
+    Rdec2D core_velocity_y_2 = { 0, core_velocity_2.y };
+    Rdec2D g = { 0, -9.8 };
+    double s = norm(core_rad_vector_1 - core_rad_vector_2);
+    double t_1 = 0;
+    double delta_t = 1;
+
+
+    while (true){
+        int k = collision_of_cores(core_rad_vector_1, core_velocity_x_1, core_velocity_y_1,
+                                   core_rad_vector_2, core_velocity_x_2, core_velocity_y_2,
+                                   1, 10);
+
+        if (k == 1){
+            std::cout << core_velocity_2;
+            break;
+        }
+        if (k == 2){
+            core_velocity_2 *= 1.3;
+            /*core_velocity_y_2 = core_velocity_y_2 * 2;
+            core_velocity_2 = core_velocity_x_2 + core_velocity_y_2;*/
+        }
+        if (k == 3){
+            /*core_velocity_y_2 = core_velocity_y_2 / 2;
+            core_velocity_2 = core_velocity_x_2 + core_velocity_y_2;*/
         }
     }
 }
