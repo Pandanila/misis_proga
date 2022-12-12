@@ -178,25 +178,21 @@ int main() {
     double s = norm(core_rad_vector_1 - core_rad_vector_2);
     double t_1 = 0;
     double delta_t = 1;
+    double delta_v = 10;
 
+    for (double x = -3000; x < 3001; x += delta_v){
+        for (double y = 0; y < 3001; y += delta_v){
+            int k = collision_of_cores(core_rad_vector_1, core_velocity_x_1, core_velocity_y_1,
+                                       core_rad_vector_2, {x, 0}, {0, y},
+                                       1, 10);
 
-    while (true){
-        int k = collision_of_cores(core_rad_vector_1, core_velocity_x_1, core_velocity_y_1,
-                                   core_rad_vector_2, core_velocity_x_2, core_velocity_y_2,
-                                   1, 10);
-
-        if (k == 1){
-            std::cout << core_velocity_2;
-            break;
-        }
-        if (k == 2){
-            core_velocity_2 *= 1.3;
-            /*core_velocity_y_2 = core_velocity_y_2 * 2;
-            core_velocity_2 = core_velocity_x_2 + core_velocity_y_2;*/
-        }
-        if (k == 3){
-            /*core_velocity_y_2 = core_velocity_y_2 / 2;
-            core_velocity_2 = core_velocity_x_2 + core_velocity_y_2;*/
+            if (k == 1) {
+                Rdec2D a = {x, 0};
+                Rdec2D b = {0, y};
+                std::cout << a + b;
+            }
         }
     }
+
+
 }
