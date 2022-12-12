@@ -184,7 +184,7 @@ int main() {
         for (double y = 0; y < 3001; y += delta_v){
             int k = collision_of_cores(core_rad_vector_1, core_velocity_x_1, core_velocity_y_1,
                                        core_rad_vector_2, {x, 0}, {0, y},
-                                       1, 10);
+                                       1, 0);
 
             if (k == 1) {
                 Rdec2D a = {x, 0};
