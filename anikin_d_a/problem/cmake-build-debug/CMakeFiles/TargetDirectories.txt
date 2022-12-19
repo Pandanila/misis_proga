@@ -1,0 +1,6 @@
+C:/Users/danan/CLionProjects/problem/cmake-build-debug/CMakeFiles/main.dir
+C:/Users/danan/CLionProjects/problem/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/danan/CLionProjects/problem/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/danan/CLionProjects/problem/cmake-build-debug/geom/CMakeFiles/geom.dir
+C:/Users/danan/CLionProjects/problem/cmake-build-debug/geom/CMakeFiles/edit_cache.dir
+C:/Users/danan/CLionProjects/problem/cmake-build-debug/geom/CMakeFiles/rebuild_cache.dir
