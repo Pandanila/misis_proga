@@ -15,8 +15,13 @@ public:
     std::istream& ReadFrom(std::istream& istrm);
     std::ostream& WriteTo(std::ostream& ostrm) const;
     void gcd();
-    void common_denom(Rational& first, Rational& second);
-    Rational& operator+=(Rational& rhs);
+    void common_denom(Rational& second);
+    void operator+=(Rational& rhs);
+    void operator-=(Rational& rhs);
+    void operator*=(const Rational& rhs);
+    void operator/=(const Rational& rhs);
+    bool operator==(const Rational& rhs) const;
+    bool operator!=(const Rational &rhs) const;
 };
 
 Rational::Rational(int32_t in_num, int32_t in_denum){
@@ -50,6 +55,7 @@ std::istream& Rational::ReadFrom(std::istream& istrm){
 
 std::ostream& Rational::WriteTo(std::ostream& ostrm) const{
     ostrm << num << separator << denum;
+    return ostrm;
 }
 
 inline std::istream& operator>>(std::istream& istrm, Rational& rhs){
@@ -57,7 +63,7 @@ inline std::istream& operator>>(std::istream& istrm, Rational& rhs){
 }
 
 inline std::ostream& operator<<(std::ostream& ostrm, Rational& rhs){
-    rhs.WriteTo(ostrm);
+    return rhs.WriteTo(ostrm);
 }
 
 
@@ -82,22 +88,54 @@ void Rational::gcd(){
 
 }
 
-void Rational::common_denom(Rational& first, Rational& second){
+void Rational::common_denom(Rational& second){
     int32_t common_denom;
-    common_denom = first.denum * second.denum;
-    first.num *= second.denum;
-    second.num *= first.denum;
-    first.denum = common_denom;
+    common_denom = denum * second.denum;
+    num *= second.denum;
+    second.num *= denum;
+    denum = common_denom;
     second.denum = common_denom;
 }
 
-Rational& Rational::operator+=(Rational &rhs) {
+void Rational::operator+=(Rational& rhs) {
+    common_denom(rhs);
+    num += rhs.num;
+    gcd();
+}
 
+void Rational::operator-=(Rational& rhs) {
+    common_denom(rhs);
+    num -= rhs.num;
+    gcd();
+}
+
+void Rational::operator*=(const Rational& rhs) {
+    num *= rhs.num;
+    denum *= rhs.denum;
+    gcd();
+}
+
+void Rational::operator/=(const Rational& rhs){
+    num *= rhs.denum;
+    denum *= rhs.num;
+    gcd();
+}
+
+bool Rational::operator==(const Rational& rhs) const {
+    return (num == rhs.num) && (denum == rhs.denum);
+}
+
+bool Rational::operator!=(const Rational& rhs) const {
+    return (num != rhs.num) || (denum != rhs.denum);
 }
 
 int main() {
-    Rational num_1 = Rational(1, 2);
+    Rational num_1 = Rational();
+    Rational num_2 = Rational();
     std::cin >> num_1;
+    std::cin >> num_2;
+    num_1 /= num_2;
     //num_1.gcd();
     std::cout << num_1;
+    //std::cout << num_2;
 }
