@@ -1,5 +1,3 @@
-#include <iostream>
-#include <istream>
 #include <ostream>
 
 class Rational{
@@ -22,6 +20,10 @@ public:
     void operator/=(const Rational& rhs);
     bool operator==(const Rational& rhs) const;
     bool operator!=(const Rational &rhs) const;
+    bool operator>( Rational &rhs);
+    bool operator<( Rational &rhs);
+    bool operator>=( Rational &rhs);
+    bool operator<=( Rational &rhs);
 };
 
 Rational::Rational(int32_t in_num, int32_t in_denum){
@@ -129,6 +131,26 @@ bool Rational::operator!=(const Rational& rhs) const {
     return (num != rhs.num) || (denum != rhs.denum);
 }
 
+bool Rational::operator>(Rational &rhs){
+    common_denom(rhs);
+    return num > rhs.num;
+};
+
+bool Rational::operator<( Rational &rhs){
+    common_denom(rhs);
+    return num < rhs.num;
+}
+
+bool Rational::operator>=( Rational &rhs){
+    common_denom(rhs);
+    return num >= rhs.num;
+}
+
+bool Rational::operator<=( Rational &rhs){
+    common_denom(rhs);
+    return num <= rhs.num;
+}
+
 Rational& operator+(Rational& lhs, Rational& rhs){
     lhs += rhs;
     return lhs;
@@ -154,5 +176,5 @@ int main() {
     Rational num_2 = Rational();
     std::cin >> num_1;
     std::cin >> num_2;
-    std::cout << 
+    std::cout << (num_1 >= num_2);
 }
