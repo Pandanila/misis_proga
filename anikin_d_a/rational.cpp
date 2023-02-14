@@ -129,13 +129,30 @@ bool Rational::operator!=(const Rational& rhs) const {
     return (num != rhs.num) || (denum != rhs.denum);
 }
 
+Rational& operator+(Rational& lhs, Rational& rhs){
+    lhs += rhs;
+    return lhs;
+}
+
+Rational& operator-(Rational& lhs, Rational& rhs){
+    lhs -= rhs;
+    return lhs;
+}
+
+Rational& operator*(Rational& lhs, Rational& rhs){
+    lhs *= rhs;
+    return lhs;
+}
+
+Rational& operator/(Rational& lhs, Rational& rhs){
+    lhs /= rhs;
+    return lhs;
+}
+
 int main() {
     Rational num_1 = Rational();
     Rational num_2 = Rational();
     std::cin >> num_1;
     std::cin >> num_2;
-    num_1 /= num_2;
-    //num_1.gcd();
-    std::cout << num_1;
-    //std::cout << num_2;
+    std::cout << 
 }
