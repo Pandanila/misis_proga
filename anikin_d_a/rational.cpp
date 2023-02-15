@@ -1,3 +1,5 @@
+#include <iostream>
+#include <istream>
 #include <ostream>
 
 class Rational{
@@ -12,12 +14,12 @@ public:
     ~Rational() = default;
     std::istream& ReadFrom(std::istream& istrm);
     std::ostream& WriteTo(std::ostream& ostrm) const;
-    void gcd();
-    void common_denom(Rational& second);
-    void operator+=(Rational& rhs);
-    void operator-=(Rational& rhs);
-    void operator*=(const Rational& rhs);
-    void operator/=(const Rational& rhs);
+    Rational& gcd();
+    Rational& common_denom(Rational& second);
+    Rational& operator+=(Rational& rhs);
+    Rational& operator-=(Rational& rhs);
+    Rational& operator*=(const Rational& rhs);
+    Rational& operator/=(const Rational& rhs);
     bool operator==(const Rational& rhs) const;
     bool operator!=(const Rational &rhs) const;
     bool operator>( Rational &rhs);
@@ -69,7 +71,7 @@ inline std::ostream& operator<<(std::ostream& ostrm, Rational& rhs){
 }
 
 
-void Rational::gcd(){
+Rational& Rational::gcd(){
 
     int32_t a = std::abs(num);
     int32_t b = std::abs(denum);
@@ -88,39 +90,46 @@ void Rational::gcd(){
     num /= divisor;
     denum /= divisor;
 
+    return *this;
+
 }
 
-void Rational::common_denom(Rational& second){
+Rational& Rational::common_denom(Rational& second){
     int32_t common_denom;
     common_denom = denum * second.denum;
     num *= second.denum;
     second.num *= denum;
     denum = common_denom;
     second.denum = common_denom;
+    return *this;
 }
 
-void Rational::operator+=(Rational& rhs) {
+Rational& Rational::operator+=(Rational& rhs) {
     common_denom(rhs);
     num += rhs.num;
     gcd();
+    return *this;
 }
 
-void Rational::operator-=(Rational& rhs) {
+Rational& Rational::operator-=(Rational& rhs) {
     common_denom(rhs);
     num -= rhs.num;
     gcd();
+    return *this;
 }
 
-void Rational::operator*=(const Rational& rhs) {
+Rational& Rational::operator*=(const Rational& rhs) {
     num *= rhs.num;
     denum *= rhs.denum;
     gcd();
+    return *this;
 }
 
-void Rational::operator/=(const Rational& rhs){
+Rational& Rational::operator/=(const Rational& rhs){
     num *= rhs.denum;
     denum *= rhs.num;
     gcd();
+    return *this;
 }
 
 bool Rational::operator==(const Rational& rhs) const {
@@ -131,7 +140,7 @@ bool Rational::operator!=(const Rational& rhs) const {
     return (num != rhs.num) || (denum != rhs.denum);
 }
 
-bool Rational::operator>(Rational &rhs){
+bool Rational::operator>(Rational &rhs) {
     common_denom(rhs);
     return num > rhs.num;
 };
